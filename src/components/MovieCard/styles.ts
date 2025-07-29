@@ -183,12 +183,14 @@ export const FavoriteButton = styled.button<{ $isFavorite: boolean }>`
 
 export const HeartIcon = styled.span<{ $isFavorite: boolean }>`
   color: ${({ theme, $isFavorite }) => 
-    $isFavorite ? theme.colors.primary : theme.colors.text.secondary};
-  font-size: 1.2rem;
-  transition: ${({ theme }) => theme.transitions.fast};
+    $isFavorite ? theme.colors.text.primary : theme.colors.text.secondary};
+  font-size: 1.3rem;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 
   ${({ $isFavorite }) => $isFavorite && css`
     animation: ${heartBeat} 0.6s ease-in-out;
+    color: ${({ theme }) => theme.colors.text.primary};
   `}
 `;
 

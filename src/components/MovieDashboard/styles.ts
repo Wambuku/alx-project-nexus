@@ -51,7 +51,11 @@ export const SectionHeader = styled.div`
     left: 0;
     width: 60px;
     height: 2px;
-    background: linear-gradient(90deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primary}80);
+    background: linear-gradient(
+      90deg, 
+      ${({ theme }) => theme.colors.primary}, 
+      ${({ theme }) => theme.colors.primary}80
+    );
   }
 `;
 
@@ -68,7 +72,11 @@ export const SectionTitle = styled.h2`
     content: '';
     width: 4px;
     height: 2rem;
-    background: linear-gradient(180deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primary}80);
+    background: linear-gradient(
+      180deg, 
+      ${({ theme }) => theme.colors.primary}, 
+      ${({ theme }) => theme.colors.primary}80
+    );
     border-radius: 2px;
   }
 
