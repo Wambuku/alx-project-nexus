@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import Image from 'next/image';
 
 const cardHover = keyframes`
@@ -81,7 +81,7 @@ export const HeartIcon = styled.span<{ $isFavorite: boolean }>`
   font-size: 1.2rem;
   transition: ${({ theme }) => theme.transitions.fast};
 
-  ${({ $isFavorite }) => $isFavorite && `
+  ${({ $isFavorite }) => $isFavorite && css`
     animation: ${heartBeat} 0.6s ease-in-out;
   `}
 `;
