@@ -11,6 +11,7 @@ import {
   MovieImage,
   MovieInfo,
   MovieTitle,
+  MovieMeta,
   MovieYear,
   Rating,
   FavoriteButton,
@@ -75,8 +76,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onFavoriteToggle }) => {
       
       <MovieInfo>
         <MovieTitle>{movie.title}</MovieTitle>
-        <MovieYear>{releaseYear}</MovieYear>
-        <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>
+        <MovieMeta>
+          <MovieYear>{releaseYear}</MovieYear>
+          <Rating>
+            <span className="star">⭐</span>
+            {movie.vote_average.toFixed(1)}
+          </Rating>
+        </MovieMeta>
       </MovieInfo>
     </CardContainer>
   );

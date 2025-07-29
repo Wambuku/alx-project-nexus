@@ -3,7 +3,16 @@ import MovieGrid from '@/components/MovieGrid';
 import SearchBar from '@/components/SearchBar';
 import { movieApi } from '@/utils/api';
 import { useMovies, useTrendingMovies } from '@/hooks/useMovies';
-import { DashboardContainer, Section, SectionTitle } from './styles';
+import { 
+  DashboardContainer, 
+  Section, 
+  SectionHeader,
+  SectionTitle, 
+  SectionSubtitle,
+  WelcomeSection,
+  WelcomeTitle,
+  WelcomeSubtitle
+} from './styles';
 
 const MovieDashboard: React.FC = () => {
   const {
@@ -30,10 +39,23 @@ const MovieDashboard: React.FC = () => {
 
   return (
     <DashboardContainer>
+      <WelcomeSection>
+        <WelcomeTitle>🎬 ALX Movie Nexus</WelcomeTitle>
+        <WelcomeSubtitle>
+          Discover your next favorite film with our curated collection of trending and popular movies. 
+          Search, explore, and save your favorites!
+        </WelcomeSubtitle>
+      </WelcomeSection>
+
       <SearchBar />
       
       <Section>
-        <SectionTitle>Trending This Week</SectionTitle>
+        <SectionHeader>
+          <div>
+            <SectionTitle>🔥 Trending This Week</SectionTitle>
+            <SectionSubtitle>The hottest movies everyone's talking about</SectionSubtitle>
+          </div>
+        </SectionHeader>
         <MovieGrid
           movies={trendingMovies}
           loading={trendingLoading}
@@ -43,7 +65,12 @@ const MovieDashboard: React.FC = () => {
       </Section>
       
       <Section>
-        <SectionTitle>Popular Movies</SectionTitle>
+        <SectionHeader>
+          <div>
+            <SectionTitle>⭐ Popular Movies</SectionTitle>
+            <SectionSubtitle>All-time favorites and crowd pleasers</SectionSubtitle>
+          </div>
+        </SectionHeader>
         <MovieGrid
           movies={popularMovies}
           loading={popularLoading}

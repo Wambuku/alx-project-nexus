@@ -24,7 +24,9 @@ const MovieGrid: React.FC<MovieGridProps> = ({
   if (error) {
     return (
       <EmptyState>
-        <p>Error loading movies: {error}</p>
+        <div className="icon">⚠️</div>
+        <div className="message">Oops! Something went wrong</div>
+        <div className="submessage">{error}</div>
       </EmptyState>
     );
   }
@@ -36,7 +38,9 @@ const MovieGrid: React.FC<MovieGridProps> = ({
   if (!loading && movies.length === 0) {
     return (
       <EmptyState>
-        <p>No movies found</p>
+        <div className="icon">🎬</div>
+        <div className="message">No movies found</div>
+        <div className="submessage">Try adjusting your search or browse our trending movies</div>
       </EmptyState>
     );
   }
