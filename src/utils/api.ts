@@ -9,6 +9,11 @@ const OMDB_BASE_URL = 'https://www.omdbapi.com';
 const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
+// Debug: Log environment variables on load
+console.log('🔧 Environment check:');
+console.log('- TMDB_API_KEY:', TMDB_API_KEY ? `${TMDB_API_KEY.substring(0, 8)}...` : 'NOT FOUND');
+console.log('- NODE_ENV:', process.env.NODE_ENV);
+
 // Fallback to demo data if no API key
 const DEMO_MOVIES: Movie[] = [
   {
@@ -122,9 +127,36 @@ const tmdbApi = axios.create({
 });
 
 export const movieApi = {
-  // Get trending movies - Try OMDb first, then TMDB, then demo data
+  // Get trending movies - Try TMDB first (since you have the key), then OMDb, then demo data
   getTrendingMovies: async (): Promise<Movie[]> => {
-    // Try OMDb API first
+    // Debug: Check if API key is loaded
+    console.log('🔑 TMDB_API_KEY:', TMDB_API_KEY ? `${TMDB_API_KEY.substring(0, 8)}...` : 'NOT FOUND');
+    console.log('🌐 TMDB_BASE_URL:', TMDB_BASE_URL);
+    
+    // Try TMDB API first (you have this key)
+    if (TMDB_API_KEY) {
+      try {
+        console.log('🚀 Attempting TMDB API call for trending movies...');
+        console.log('📡 Request URL:', `${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY.substring(0, 8)}...`);
+        
+        const response = await tmdbApi.get<ApiResponse<Movie>>('/trending/movie/week');
+        console.log('✅ TMDB API SUCCESS! Got', response.data.results.length, 'movies');
+        console.log('🎬 First movie:', response.data.results[0]?.title, 'poster:', response.data.results[0]?.poster_path);
+        return response.data.results;
+      } catch (error) {
+        console.error('❌ TMDB API FAILED with error:', error);
+        if (axios.isAxiosError(error)) {
+          console.error('📊 Status:', error.response?.status);
+          console.error('📝 Response:', error.response?.data);
+          console.error('🔗 URL:', error.config?.url);
+        }
+        console.warn('TMDB API failed, trying OMDb...');
+      }
+    } else {
+      console.warn('⚠️ No TMDB API key found in environment variables');
+    }
+
+    // Try OMDb API as backup
     if (OMDB_API_KEY) {
       try {
         const omdbMovies = await omdbApi.getTrendingMovies();
@@ -133,29 +165,35 @@ export const movieApi = {
           return omdbMovies;
         }
       } catch (error) {
-        console.warn('OMDb API failed, trying TMDB...');
-      }
-    }
-
-    // Fallback to TMDB
-    if (TMDB_API_KEY) {
-      try {
-        const response = await tmdbApi.get<ApiResponse<Movie>>('/trending/movie/week');
-        console.log('Using TMDB API for trending movies');
-        return response.data.results;
-      } catch (error) {
-        console.warn('TMDB API failed, using demo data...');
+        console.warn('OMDb API failed...');
       }
     }
 
     // Final fallback to demo data
-    console.log('Using demo data for trending movies');
+    console.log('⚠️ Using demo data for trending movies');
     return DEMO_MOVIES.slice(0, 4);
   },
 
   // Get popular movies
   getPopularMovies: async (page: number = 1): Promise<ApiResponse<Movie>> => {
-    // Try OMDb API first
+    // Try TMDB API first (you have this key)
+    if (TMDB_API_KEY) {
+      try {
+        console.log('Attempting TMDB API call for popular movies...');
+        const response = await tmdbApi.get<ApiResponse<Movie>>('/movie/popular', {
+          params: { page },
+        });
+        console.log('✅ Using TMDB API for popular movies', response.data.results.length, 'movies');
+        return response.data;
+      } catch (error) {
+        console.error('❌ TMDB API failed:', error);
+        console.warn('TMDB API failed, trying OMDb...');
+      }
+    } else {
+      console.warn('⚠️ No TMDB API key found');
+    }
+
+    // Try OMDb API as backup
     if (OMDB_API_KEY) {
       try {
         const omdbResult = await omdbApi.getPopularMovies(page);
@@ -164,25 +202,12 @@ export const movieApi = {
           return omdbResult;
         }
       } catch (error) {
-        console.warn('OMDb API failed, trying TMDB...');
-      }
-    }
-
-    // Fallback to TMDB
-    if (TMDB_API_KEY) {
-      try {
-        const response = await tmdbApi.get<ApiResponse<Movie>>('/movie/popular', {
-          params: { page },
-        });
-        console.log('Using TMDB API for popular movies');
-        return response.data;
-      } catch (error) {
-        console.warn('TMDB API failed, using demo data...');
+        console.warn('OMDb API failed...');
       }
     }
 
     // Final fallback to demo data
-    console.log('Using demo data for popular movies');
+    console.log('⚠️ Using demo data for popular movies');
     return {
       page: 1,
       results: DEMO_MOVIES,
@@ -282,7 +307,7 @@ export const movieApi = {
     // Try OMDb API first
     if (OMDB_API_KEY) {
       try {
-        const omdbRecs = await omdbApi.getRecommendations(movieId);
+        const omdbRecs = await omdbApi.getRecommendations();
         if (omdbRecs.length > 0) {
           console.log('Using OMDb API for recommendations');
           return omdbRecs;
@@ -310,8 +335,11 @@ export const movieApi = {
 };
 
 export const getImageUrl = (path: string, size: string = 'w500'): string => {
-  if (path === '/placeholder-movie.svg') {
-    return path;
+  if (!path || path === '/placeholder-movie.svg' || path === 'null') {
+    return '/placeholder-movie.svg';
   }
-  return `https://image.tmdb.org/t/p/${size}${path}`;
+  
+  // Ensure path starts with /
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `https://image.tmdb.org/t/p/${size}${cleanPath}`;
 };

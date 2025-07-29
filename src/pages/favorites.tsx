@@ -18,3 +18,10 @@ export default function FavoritesPage() {
     </>
   );
 }
+
+// This ensures the page is statically generated and doesn't try to access localStorage during build
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}

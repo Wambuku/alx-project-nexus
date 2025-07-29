@@ -196,7 +196,7 @@ export const omdbApi = {
   },
 
   // Get recommendations (simulate with similar movies)
-  getRecommendations: async (movieId: string): Promise<Movie[]> => {
+  getRecommendations: async (): Promise<Movie[]> => {
     if (!OMDB_API_KEY) {
       return [];
     }

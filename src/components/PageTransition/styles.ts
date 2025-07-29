@@ -1,9 +1,9 @@
 import styled, { keyframes } from 'styled-components';
 
-const fadeInUp = keyframes`
+const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -11,29 +11,12 @@ const fadeInUp = keyframes`
   }
 `;
 
-const slideInFromLeft = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
 export const TransitionContainer = styled.div`
   width: 100%;
 `;
 
-export const FadeIn = styled.div<{ $delay: number }>`
-  animation: ${fadeInUp} 0.6s ease-out forwards;
-  animation-delay: ${({ $delay }) => $delay}ms;
-  opacity: 0;
-`;
-
-export const SlideIn = styled.div<{ $delay: number }>`
-  animation: ${slideInFromLeft} 0.5s ease-out forwards;
-  animation-delay: ${({ $delay }) => $delay}ms;
+export const FadeIn = styled.div<{ $delay?: number }>`
+  animation: ${fadeIn} 0.6s ease-out forwards;
+  animation-delay: ${({ $delay = 0 }) => $delay}ms;
   opacity: 0;
 `;

@@ -21,16 +21,16 @@ export const useToast = () => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
   }, []);
 
-  const success = useCallback((message: string, duration?: number) => {
-    showToast(message, 'success', duration);
+  const success = useCallback((message: string) => {
+    showToast(message, 'success');
   }, [showToast]);
 
-  const error = useCallback((message: string, duration?: number) => {
-    showToast(message, 'error', duration);
+  const error = useCallback((message: string) => {
+    showToast(message, 'error');
   }, [showToast]);
 
-  const info = useCallback((message: string, duration?: number) => {
-    showToast(message, 'info', duration);
+  const info = useCallback((message: string) => {
+    showToast(message, 'info');
   }, [showToast]);
 
   return {

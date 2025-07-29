@@ -49,20 +49,21 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie }) => {
 
   useEffect(() => {
     setIsFavorite(favoritesStorage.isFavorite(movie.id));
+    
+    const loadRecommendations = async () => {
+      try {
+        setLoadingRecommendations(true);
+        const recs = await movieApi.getRecommendations(movie.id.toString());
+        setRecommendations(recs.slice(0, 12)); // Limit to 12 recommendations
+      } catch (error) {
+        console.error('Failed to load recommendations:', error);
+      } finally {
+        setLoadingRecommendations(false);
+      }
+    };
+
     loadRecommendations();
   }, [movie.id]);
-
-  const loadRecommendations = async () => {
-    try {
-      setLoadingRecommendations(true);
-      const recs = await movieApi.getRecommendations(movie.id.toString());
-      setRecommendations(recs.slice(0, 12)); // Limit to 12 recommendations
-    } catch (error) {
-      console.error('Failed to load recommendations:', error);
-    } finally {
-      setLoadingRecommendations(false);
-    }
-  };
 
   const handleFavoriteToggle = () => {
     if (isFavorite) {
@@ -85,13 +86,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie }) => {
     return `${hours}h ${mins}m`;
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
+
 
   const backdropUrl = movie.backdrop_path 
     ? getImageUrl(movie.backdrop_path, 'w1280') 
@@ -132,7 +127,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie }) => {
           <MovieInfo>
             <div>
               <MovieTitle>{movie.title}</MovieTitle>
-              {movie.tagline && <MovieTagline>"{movie.tagline}"</MovieTagline>}
+              {movie.tagline && <MovieTagline>&ldquo;{movie.tagline}&rdquo;</MovieTagline>}
             </div>
             
             <MovieMeta>

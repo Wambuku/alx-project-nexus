@@ -3,11 +3,11 @@ import Head from 'next/head';
 import Layout from '@/components/Layout';
 import MovieDetails from '@/components/MovieDetails';
 import PageTransition from '@/components/PageTransition';
-import { Movie } from '@/types/movie';
+import { MovieDetails as MovieDetailsType } from '@/types/movie';
 import { movieApi } from '@/utils/api';
 
 interface MoviePageProps {
-  movie: Movie | null;
+  movie: MovieDetailsType | null;
 }
 
 export default function MoviePage({ movie }: MoviePageProps) {

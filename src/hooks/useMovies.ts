@@ -21,16 +21,16 @@ export const useMovies = (
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const loadMovies = useCallback(async (page: number, append: boolean = false) => {
+  const loadMovies = useCallback(async (pageNum: number, append: boolean = false) => {
     try {
       setLoading(true);
       setError(null);
       
-      const response = await fetchFunction(page);
+      const response = await fetchFunction(pageNum);
       
       setMovies(prev => append ? [...prev, ...response.results] : response.results);
       setTotalPages(response.total_pages);
-      setCurrentPage(page);
+      setCurrentPage(pageNum);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load movies');
     } finally {

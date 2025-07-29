@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import { Movie } from '@/types/movie';
 import { getImageUrl } from '@/utils/api';
 import { favoritesStorage } from '@/utils/localStorage';

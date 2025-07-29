@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { movieApi } from '@/utils/api';
-import { Movie } from '@/types/movie';
 import { useMovies } from '@/hooks/useMovies';
 import MovieGrid from '@/components/MovieGrid';
 import {
@@ -69,7 +68,7 @@ const SearchBar: React.FC = () => {
       {searchQuery && (
         <SearchResults>
           <SearchTitle>
-            Search results for "{searchQuery}"
+            Search results for &ldquo;{searchQuery}&rdquo;
             {searchResults.length > 0 && ` (${searchResults.length} found)`}
           </SearchTitle>
           <MovieGrid
