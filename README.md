@@ -37,7 +37,6 @@ alx-movie-nexus/
 │   ├── styles/             # Global styles and theme
 │   ├── types/              # TypeScript type definitions
 │   └── utils/              # Utility functions and API
-├── .kiro/                  # Kiro AI configuration
 └── public/                 # Static assets
 ```
 
